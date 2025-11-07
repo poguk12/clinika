@@ -72,6 +72,7 @@ class MainWindow(QMainWindow):
         #endregion
 
         #region VTOROY BLOK
+        
         main_h_box_vtoroy = QHBoxLayout()  
 
         #region Create button navigator 
@@ -89,6 +90,10 @@ class MainWindow(QMainWindow):
         button_doctor.setStyleSheet("font-size: 24px; font-family: Arial; padding-left: 15px;")
         #endregion
 
+        button_navigatot.clicked.connect(navigator_click)
+        button_date.clicked.connect(date_click)
+        button_doctor.clicked.connect(doctor_click)
+
         main_h_box_vtoroy.addWidget(button_navigatot)
         main_h_box_vtoroy.addWidget(button_date)
         main_h_box_vtoroy.addWidget(button_doctor)
@@ -99,6 +104,13 @@ class MainWindow(QMainWindow):
         main_v_box.addLayout(top_layout)
         main_v_box.addLayout(main_h_box_vtoroy)
 
+def navigator_click():
+    print("CLICK")
+    pass
+def date_click():
+    pass
+def doctor_click():
+    pass
 
 app = QApplication(sys.argv)
 window = MainWindow()
