@@ -97,8 +97,8 @@ class MainWindow(QMainWindow):
         main_h_box_vtoroy.addWidget(button_navigatot)
         main_h_box_vtoroy.addWidget(button_date)
         main_h_box_vtoroy.addWidget(button_doctor)
-
-        main_h_box_vtoroy.setAlignment(Qt.AlignmentFlag.AlignTop)
+        
+        #endregion
 
         # Добавляем верхний layout в основной вертикальный layout
         main_v_box.addLayout(top_layout)
