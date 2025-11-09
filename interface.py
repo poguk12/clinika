@@ -16,27 +16,26 @@ class MainWindow(QMainWindow):
         self.show()
 
     def setUpMainWindow(self):
-
-        #region PERVUY BLOK
+        # Создаем центральный виджет
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         
-        main_v_box = QVBoxLayout(central_widget)
+        main_v_box = QVBoxLayout()
 
-        logo_image = "nolic.png"
-        
-        # Создаем горизонтальный контейнер для всей верхней строки
-        top_layout = QHBoxLayout()
-        
-        # Контейнер для логотипа и названия (слева)
-        left_layout_logo_name = QHBoxLayout()
-        rigth_layout_date = QHBoxLayout()
-        
+        #region PERVUY BLOK
+        main_h_box_perviy = QHBoxLayout()
+
+        logo_image = "nolic.png"  # Убедитесь, что файл существует
+  
         #region Create Logotype
         logo_label = QLabel()
-        logo_pixmap = QPixmap(logo_image)
-        logo_pixmap = logo_pixmap.scaled(30, 30)
-        logo_label.setPixmap(logo_pixmap)
+        try:
+            logo_pixmap = QPixmap(logo_image)
+            if not logo_pixmap.isNull():
+                logo_pixmap = logo_pixmap.scaled(30, 30)
+                logo_label.setPixmap(logo_pixmap)
+        except:
+            pass  # Если логотип не загружается, просто продолжаем
         logo_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
         #endregion
 
@@ -53,21 +52,31 @@ class MainWindow(QMainWindow):
         label_date.setStyleSheet("font-size: 24px; font-family: Arial;")
         #endregion
 
+        # Контейнер для логотипа и названия (слева)
+        left_layout_logo_name = QHBoxLayout()
+        right_layout_date = QHBoxLayout()
+
+        # Создаем контейнерные виджеты для layout'ов
+        left_container = QWidget()
+        right_container = QWidget()
+
+        # Добавляем виджеты в левый layout
         left_layout_logo_name.addWidget(logo_label)
         left_layout_logo_name.addWidget(label_name)
+        left_layout_logo_name.setContentsMargins(0, 0, 0, 0)  # Убираем отступы
 
-        rigth_layout_date.addWidget(label_date)
-        
-        left_widget = QWidget()
-        left_widget.setLayout(left_layout_logo_name)
+        # Добавляем виджеты в правый layout
+        right_layout_date.addWidget(label_date)
+        right_layout_date.setContentsMargins(0, 0, 0, 0)  # Убираем отступы
 
-        rigth_widget = QWidget()
-        rigth_widget.setLayout(rigth_layout_date)
+        # Устанавливаем layout'ы для контейнерных виджетов
+        left_container.setLayout(left_layout_logo_name)
+        right_container.setLayout(right_layout_date)
 
-        # Добавляем левую часть и дату в верхний layout
-        top_layout.addWidget(left_widget)
-        top_layout.addStretch()  # Растягивающее пространство между левой и правой частью
-        top_layout.addWidget(rigth_widget)
+        # Добавляем контейнеры в основной layout
+        main_h_box_perviy.addWidget(left_container)
+        main_h_box_perviy.addStretch()  # Растягивающее пространство между левой и правой частью
+        main_h_box_perviy.addWidget(right_container)
 
         #endregion
 
@@ -76,23 +85,23 @@ class MainWindow(QMainWindow):
         main_h_box_vtoroy = QHBoxLayout()  
 
         #region Create button navigator 
-        button_navigatot = QPushButton("Навигатор", self)
+        button_navigatot = QPushButton("Навигатор")
         button_navigatot.setStyleSheet("font-size: 24px; font-family: Arial; padding-left: 15px;")
         #endregion
 
         #region Create button calendar 
-        button_date = QPushButton("Выбор даты: календарь", self)
+        button_date = QPushButton("Выбор даты: календарь")
         button_date.setStyleSheet("font-size: 24px; font-family: Arial; padding-left: 15px;")
         #endregion
 
         #region Create button doctor 
-        button_doctor = QPushButton("Выбор врача: ...v", self)
+        button_doctor = QPushButton("Выбор врача: ...v")
         button_doctor.setStyleSheet("font-size: 24px; font-family: Arial; padding-left: 15px;")
         #endregion
 
-        button_navigatot.clicked.connect(navigator_click)
-        button_date.clicked.connect(date_click)
-        button_doctor.clicked.connect(doctor_click)
+        button_navigatot.clicked.connect(self.navigator_click)
+        button_date.clicked.connect(self.date_click)
+        button_doctor.clicked.connect(self.doctor_click)
 
         main_h_box_vtoroy.addWidget(button_navigatot)
         main_h_box_vtoroy.addWidget(button_date)
@@ -100,18 +109,57 @@ class MainWindow(QMainWindow):
         
         #endregion
 
-        # Добавляем верхний layout в основной вертикальный layout
-        main_v_box.addLayout(top_layout)
+        #region 3 blok
+
+        main_h_box_tretiy = QHBoxLayout()  
+
+        button_pn = QPushButton("Пн")
+        button_vt = QPushButton("Вт")
+        button_sr = QPushButton("Ср")
+        button_cht = QPushButton("Чт")
+        button_pt = QPushButton("Пт")
+        button_sb = QPushButton("Сб")
+        button_vs = QPushButton("Вс")
+
+        button_pn.clicked.connect(lambda: self.zapros_date(1))
+        button_vt.clicked.connect(lambda: self.zapros_date(2))
+        button_sr.clicked.connect(lambda: self.zapros_date(3))
+        button_cht.clicked.connect(lambda: self.zapros_date(4))
+        button_pt.clicked.connect(lambda: self.zapros_date(5))
+        button_sb.clicked.connect(lambda: self.zapros_date(6))
+        button_vs.clicked.connect(lambda: self.zapros_date(7))
+
+        main_h_box_tretiy.addWidget(button_pn)
+        main_h_box_tretiy.addWidget(button_vt)
+        main_h_box_tretiy.addWidget(button_sr)
+        main_h_box_tretiy.addWidget(button_cht)
+        main_h_box_tretiy.addWidget(button_pt)
+        main_h_box_tretiy.addWidget(button_sb)
+        main_h_box_tretiy.addWidget(button_vs)
+        
+        #endregion
+
+        # Добавляем все layout в основной вертикальный layout
+        main_v_box.addLayout(main_h_box_perviy)
         main_v_box.addLayout(main_h_box_vtoroy)
+        main_v_box.addLayout(main_h_box_tretiy)
+        
+        # Устанавливаем layout для центрального виджета
+        central_widget.setLayout(main_v_box)
 
-def navigator_click():
-    print("CLICK")
-    pass
-def date_click():
-    pass
-def doctor_click():
-    pass
+    def navigator_click(self):
+        print("CLICK Navigator")
+        
+    def date_click(self):
+        print("CLICK Date")
+        
+    def doctor_click(self):
+        print("CLICK Doctor")
 
-app = QApplication(sys.argv)
-window = MainWindow()
-sys.exit(app.exec())
+    def zapros_date(self, datte):
+        print(f"Запрос даты: {datte}")
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    sys.exit(app.exec())
