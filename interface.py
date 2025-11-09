@@ -156,6 +156,12 @@ class MainWindow(QMainWindow):
             ["10:00", "Свободно",    "Заблокировано", "Свободно"],
             ["10:30", "Сидоров К.",  "Свободно",    "Иванов А."],
             ["11:00", "Свободно",    "Петров В.",   "Свободно"],
+            ["11:30", "Заблокировано", "Свободно",  "Петров В."],
+            ["09:00", "Свободно",    "Петров В.",   "Свободно"],
+            ["09:30", "Иванов А.",   "Свободно",    "Заблокировано"],
+            ["10:00", "Свободно",    "Заблокировано", "Свободно"],
+            ["10:30", "Сидоров К.",  "Свободно",    "Иванов А."],
+            ["11:00", "Свободно",    "Петров В.",   "Свободно"],
             ["11:30", "Заблокировано", "Свободно",  "Петров В."]
         ]
 
@@ -186,20 +192,46 @@ class MainWindow(QMainWindow):
             h_box.addWidget(doctor3)
             
             main_v_box_chetvertuy.addLayout(h_box)
-
-#endregion
         
         #endregion 
+            
+        #region 5 blok 
+
+        main_h_box_pyatuy = QHBoxLayout()
+
+        button_newPriem = QPushButton("Новый прием", self)
+        button_patient = QPushButton("Пациент", self)
+        button_setting = QPushButton("Настройки", self)
+
+        button_newPriem.clicked.connect(self.newPriem)
+        button_patient.clicked.connect(self.newPatient)
+        button_setting.clicked.connect(self.setting)
+
+        main_h_box_pyatuy.addWidget(button_newPriem)
+        main_h_box_pyatuy.addWidget(button_patient)
+        main_h_box_pyatuy.addWidget(button_setting)
+
+        #endregion
+        
 
         # Добавляем все layout в основной вертикальный layout
         main_v_box.addLayout(main_h_box_perviy)
         main_v_box.addLayout(main_h_box_vtoroy)
         main_v_box.addLayout(main_h_box_tretiy)
         main_v_box.addLayout(main_v_box_chetvertuy)
+        main_v_box.addLayout(main_h_box_pyatuy)
         
         # Устанавливаем layout для центрального виджета
         central_widget.setLayout(main_v_box)
 
+    def newPriem(self):
+        pass
+
+    def newPatient(self):
+        pass
+    def setting(self):
+        pass  
+    
     def navigator_click(self):
         print("CLICK Navigator")
         
