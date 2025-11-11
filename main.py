@@ -4,30 +4,38 @@ import sqlite3
 connection = sqlite3.connect('klinika.db')
 cursor = connection.cursor()
 
-doctors_data = [
-    ('Доктор Иванов', 'Терапевт'),
-    ('Доктор Петрова', 'Хирург'),
-    ('Доктор Сидоров', 'Кардиолог')
-]
 
-patients_data = [
-    ('Иван Сергеев', '+79990001122', 'ivan@mail.ru'),
-    ('Мария Петрова', '+79990003344', 'maria@mail.ru'),
-    ('Алексей Козлов', '+79990005566', 'alex@mail.ru')
-]
-
-appointments_data = [
-    ('2024-01-15', '09:00', 1, 1, 'confirmed', 'Консультация', 30, 'Первичный прием'),
-    ('2024-01-15', '10:00', 2, 2, 'confirmed', 'Осмотр', 45, 'Послеоперационный осмотр'),
-    ('2024-01-16', '11:00', 1, None, 'free', 'Консультация', 30, None)
-]
-
-cursor.executemany('INSERT INTO doctors (name, specialization) VALUES (?, ?)', doctors_data)
-cursor.executemany('INSERT INTO patients (fullName, phone, email) VALUES (?, ?, ?)', patients_data)
-cursor.executemany('''
-    INSERT INTO appointments (date, time, doctor_id, patient_id, status, service_type, duration, notes) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-''', appointments_data)
+def getDoctor():
+    connection = sqlite3.connect('klinika.db')
+    cursor = connection.cursor()
+    
+    cursor.execute('SELECT name FROM doctors')
+    names = cursor.fetchall()
+    
+    connection.close()  # Закрываем соединение после выполнения
+    
+    return [name[0] for name in names]
+    
+def getAppointments(doctor_id):
+    connection = sqlite3.connect('klinika.db')
+    cursor = connection.cursor()
+    
+    cursor.execute('''
+        SELECT 
+            a.time, 
+            p.fullName as patient_name, 
+            a.service_type, 
+            a.notes, 
+            a.status 
+        FROM appointments a
+        LEFT JOIN patients p ON a.patient_id = p.id
+        WHERE a.doctor_id = ?
+    ''', (doctor_id,))
+    
+    appointments = cursor.fetchall()
+    connection.close()
+    
+    return appointments
 
 # Сохраняем изменения и закрываем соединение
 connection.commit()

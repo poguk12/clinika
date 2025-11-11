@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBo
 from PyQt6.QtGui import QAction, QPixmap
 from PyQt6.QtCore import Qt
 from datetime import datetime  
+import main
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -141,29 +142,27 @@ class MainWindow(QMainWindow):
 
         #region 4 blok
 
-       #region 4 BLOK - Простое расписание
+        #region 4 BLOK - Простое расписание
         main_v_box_chetvertuy = QVBoxLayout()
 
         # Заголовок
         label_title = QLabel("Расписание")
+        
+        #doctors = main.getDoctor()
+        #label_title2 = QLabel(str(doctors))
+
         label_title.setStyleSheet("font-size: 16px; font-weight: bold;")
         main_v_box_chetvertuy.addWidget(label_title)
+        #main_v_box_chetvertuy.addWidget(label_title2)
 
-        # Данные для таблицы
-        schedule_data = [
-            ["09:00", "Свободно",    "Петров В."],
-            ["09:30", "Иванов А.",   "Свободно"],
-            ["10:00", "Свободно",    "Заблокировано"],
-            ["10:30", "Сидоров К.",  "Свободно"],
-            ["11:00", "Свободно",    "Петров В."],
-            ["11:30", "Заблокировано", "Свободно"],
-            ["12:00", "Свободно",    "Петров В."],
-            ["12:30", "Иванов А.",   "Свободно"],
-            ["13:00", "Свободно",    "Заблокировано"],
-            ["13:30", "Сидоров К.",  "Свободно"],
-            ["14:00", "Свободно",    "Петров В."],
-            ["14:30", "Заблокировано", "Свободно"]
-        ]
+        appointments = main.getAppointments(1)
+
+                # Данные для таблицы
+        schedule_data = []
+
+        if appointments:
+            for time, name, service, notes, status in appointments:
+                schedule_data.append([time, name, service, notes, status])
 
         # Создаем строки расписания
         for row in schedule_data:
@@ -172,22 +171,20 @@ class MainWindow(QMainWindow):
             time_label = QLabel(row[0])
             time_label.setStyleSheet("font-weight: bold; min-width: 50px;")
             
-            doctor1 = QLabel(row[1])
-            doctor2 = QLabel(row[2]) 
+            name = QLabel(row[1])
+            type = QLabel(row[2])
+            notes = QLabel(row[3])
+            status = QLabel(row[4]) 
             
-            # Ставим стили в зависимости от статуса
-            for label in [doctor1, doctor2]:
-                text = label.text()
-                if text == "Свободно":
-                    label.setStyleSheet("background: lightgreen; padding: 5px; margin: 2px;")
-                elif text == "Заблокировано":
-                    label.setStyleSheet("background: lightcoral; padding: 5px; margin: 2px;")
-                else:
-                    label.setStyleSheet("background: lightblue; padding: 5px; margin: 2px;")
+            for label in [name, type, notes, status]:
+
+                label.setStyleSheet("background: Light sea green; padding: 5px; margin: 2px;")
             
             h_box.addWidget(time_label)
-            h_box.addWidget(doctor1)
-            h_box.addWidget(doctor2)
+            h_box.addWidget(name)
+            h_box.addWidget(type)
+            h_box.addWidget(notes)
+            h_box.addWidget(status)
             
             main_v_box_chetvertuy.addLayout(h_box)
         
