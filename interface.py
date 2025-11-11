@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
 
         #region DATe label
         now = datetime.now() 
-        label_date = QLabel(f"{now}")
+        label_date = QLabel(f"{now.strftime('%d.%m.%Y')}")
         label_date.setAlignment(Qt.AlignmentFlag.AlignRight)
         label_date.setStyleSheet("font-size: 24px; font-family: Arial;")
         #endregion
