@@ -87,10 +87,6 @@ class MainWindow(QMainWindow):
         
         main_h_box_vtoroy = QHBoxLayout()  
 
-        #region Create button navigator 
-        button_navigatot = QPushButton("Навигатор")
-        button_navigatot.setStyleSheet("font-size: 24px; font-family: Arial; padding-left: 15px;")
-        #endregion
 
         #region Create button calendar 
         button_date = QPushButton("Выбор даты: календарь")
@@ -102,61 +98,23 @@ class MainWindow(QMainWindow):
         combo_doctor = QComboBox(self)
         combo_doctor.addItems(main.getDoctorName())
         combo_doctor.textActivated.connect(self.onActivated)
-        #endregion
 
-        button_navigatot.clicked.connect(self.navigator_click)
         button_date.clicked.connect(self.date_click)
 
-        main_h_box_vtoroy.addWidget(button_navigatot)
         main_h_box_vtoroy.addWidget(button_date)
         main_h_box_vtoroy.addWidget(combo_doctor)
-        
+       
         #endregion
 
-        #region 3 blok
-
-        main_h_box_tretiy = QHBoxLayout()  
-
-        button_pn = QPushButton("Пн")
-        button_vt = QPushButton("Вт")
-        button_sr = QPushButton("Ср")
-        button_cht = QPushButton("Чт")
-        button_pt = QPushButton("Пт")
-        button_sb = QPushButton("Сб")
-        button_vs = QPushButton("Вс")
-
-        button_pn.clicked.connect(lambda: self.zapros_date(1))
-        button_vt.clicked.connect(lambda: self.zapros_date(2))
-        button_sr.clicked.connect(lambda: self.zapros_date(3))
-        button_cht.clicked.connect(lambda: self.zapros_date(4))
-        button_pt.clicked.connect(lambda: self.zapros_date(5))
-        button_sb.clicked.connect(lambda: self.zapros_date(6))
-        button_vs.clicked.connect(lambda: self.zapros_date(7))
-
-        main_h_box_tretiy.addWidget(button_pn)
-        main_h_box_tretiy.addWidget(button_vt)
-        main_h_box_tretiy.addWidget(button_sr)
-        main_h_box_tretiy.addWidget(button_cht)
-        main_h_box_tretiy.addWidget(button_pt)
-        main_h_box_tretiy.addWidget(button_sb)
-        main_h_box_tretiy.addWidget(button_vs)
-        
-        #endregion
-
-        #region 4 blok
 
         #region 4 BLOK - Простое расписание
         main_v_box_chetvertuy = QVBoxLayout()
 
         # Заголовок
         label_title = QLabel("Расписание")
-        
-        #doctors = main.getDoctor()
-        #label_title2 = QLabel(str(doctors))
 
         label_title.setStyleSheet("font-size: 16px; font-weight: bold;")
         main_v_box_chetvertuy.addWidget(label_title)
-        #main_v_box_chetvertuy.addWidget(label_title2)
 
         self.schedule_layout = main_v_box_chetvertuy  # Сохраняем ссылку
         self.update_schedule(self.idDoctor)
@@ -181,12 +139,10 @@ class MainWindow(QMainWindow):
         main_h_box_pyatuy.addWidget(button_setting)
 
         #endregion
-        
 
         # Добавляем все layout в основной вертикальный layout
         main_v_box.addLayout(main_h_box_perviy)
         main_v_box.addLayout(main_h_box_vtoroy)
-        main_v_box.addLayout(main_h_box_tretiy)
         main_v_box.addLayout(main_v_box_chetvertuy)
         main_v_box.addLayout(main_h_box_pyatuy)
         
@@ -198,11 +154,9 @@ class MainWindow(QMainWindow):
 
     def newPatient(self):
         pass
+    
     def setting(self):
         pass  
-    
-    def navigator_click(self):
-        print("CLICK Navigator")
         
     def date_click(self):
         print("CLICK Date")
@@ -223,7 +177,7 @@ class MainWindow(QMainWindow):
 
         self.update_schedule(self.idDoctor)
 
-        ##TODO здесь надо обновление экрана при выборе врача
+
     def update_schedule(self, doctor_id):
         # Очищаем существующее расписание (кроме заголовка)
         if self.schedule_layout:
