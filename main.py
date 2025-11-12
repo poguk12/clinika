@@ -37,6 +37,20 @@ def getAppointments(doctor_id):
     
     return appointments
 
+def getDoctorName():
+    connection = sqlite3.connect('klinika.db')
+    cursor = connection.cursor()
+    
+    cursor.execute('''
+        SELECT name FROM doctors
+    ''')
+    
+    nameDoctor = [row[0] for row in cursor.fetchall()]  # Извлекаем только имена
+    connection.close()
+    
+    return nameDoctor
+
+
 # Сохраняем изменения и закрываем соединение
 connection.commit()
 connection.close()

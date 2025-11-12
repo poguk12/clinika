@@ -1,9 +1,11 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QHBoxLayout, QGridLayout
+from PyQt6.QtWidgets import QApplication, QComboBox, QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QHBoxLayout, QGridLayout
 from PyQt6.QtGui import QAction, QPixmap
 from PyQt6.QtCore import Qt
 from datetime import datetime  
 import main
+
+idDoctor = 1
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -96,17 +98,18 @@ class MainWindow(QMainWindow):
         #endregion
 
         #region Create button doctor 
-        button_doctor = QPushButton("Выбор врача: ...v")
-        button_doctor.setStyleSheet("font-size: 24px; font-family: Arial; padding-left: 15px;")
+
+        combo_doctor = QComboBox(self)
+        combo_doctor.addItems(main.getDoctorName())
+        combo_doctor.textActivated.connect(self.onActivated)
         #endregion
 
         button_navigatot.clicked.connect(self.navigator_click)
         button_date.clicked.connect(self.date_click)
-        button_doctor.clicked.connect(self.doctor_click)
 
         main_h_box_vtoroy.addWidget(button_navigatot)
         main_h_box_vtoroy.addWidget(button_date)
-        main_h_box_vtoroy.addWidget(button_doctor)
+        main_h_box_vtoroy.addWidget(combo_doctor)
         
         #endregion
 
@@ -155,7 +158,7 @@ class MainWindow(QMainWindow):
         main_v_box_chetvertuy.addWidget(label_title)
         #main_v_box_chetvertuy.addWidget(label_title2)
 
-        appointments = main.getAppointments(1)
+        appointments = main.getAppointments(idDoctor)
 
                 # Данные для таблицы
         schedule_data = []
@@ -238,6 +241,14 @@ class MainWindow(QMainWindow):
 
     def zapros_date(self, datte):
         print(f"Запрос даты: {datte}")
+
+    def onActivated(self, text):
+        if(text == "Доктор Петрова"):
+            idDoctor = 1
+        if (text == "Доктор Сидоров"):
+            idDoctor = 2
+        if (text == "Доктор Иванов"):
+            idDoctor = 3
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
