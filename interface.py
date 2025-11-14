@@ -107,8 +107,6 @@ class MainWindow(QMainWindow):
         combo_doctor.textActivated.connect(self.onActivated)
         combo_doctor.setStyleSheet("font-size: 24px; font-family: Arial; padding-left: 15px;")
 
-        #date_edit.clicked.connect(self.date_click)
-
         main_h_box_vtoroy.addWidget(date_edit)
         main_h_box_vtoroy.addWidget(combo_doctor)
             
@@ -171,16 +169,6 @@ class MainWindow(QMainWindow):
     
     def setting(self):
         pass  
-
-        
-    def date_click(self):
-        print("CLICK Date")
-        
-    def doctor_click(self):
-        print("CLICK Doctor")
-
-    def zapros_date(self, datte):
-        print(f"Запрос даты: {datte}")
 
     def onActivated(self, text):
         if (text == "Доктор Иванов"):
@@ -257,6 +245,16 @@ class CustomDialog(QDialog):
     def __init__(self):
         super().__init__()
 
+        self.DatePriem = f"{datetime.now().strftime('%Y-%m-%d')}"
+
+        self.timeZapiz = "09:00"
+
+        self.idDoctor = 1  # Сначала инициализируем атрибуты
+
+        self.serviceType = "Консультация"
+
+        self.Notes = ""
+
         self.setWindowTitle("Добавить пациента!")
 
         message = QLabel("Выберите дату записи")
@@ -269,6 +267,7 @@ class CustomDialog(QDialog):
         dateZapis.setDisplayFormat("yyyy-MM-dd")
         dateZapis.setStyleSheet("font-size: 20px; font-family: Arial; padding-left: 15px;")
         dateZapis.setFixedWidth(200)
+        dateZapis.dateChanged.connect(self.on_date_changed)
         #endregion
 
         message2 = QLabel("Выберите дату записи")
@@ -278,6 +277,7 @@ class CustomDialog(QDialog):
         vremaZapis.addItems(["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00"])
         vremaZapis.setStyleSheet("font-size: 20px; font-family: Arial; padding-left: 15px;")
         vremaZapis.setFixedWidth(200)
+        vremaZapis.textActivated.connect(self.vremaChoose)
 
         message3 = QLabel("Выбрать врача")
         message3.setStyleSheet("font-weight: bold; min-width: 50px;")
@@ -286,6 +286,7 @@ class CustomDialog(QDialog):
         viborVrach.addItems(["Доктор Иванов", "Доктор Петрова", "Доктор Сидоров"])
         viborVrach.setStyleSheet("font-size: 20px; font-family: Arial; padding-left: 15px;")
         viborVrach.setFixedWidth(200)
+        viborVrach.textActivated.connect(self.dateChoose)
 
         message4 = QLabel("Какая услуга?")
         message4.setStyleSheet("font-weight: bold; min-width: 50px;")
@@ -294,6 +295,7 @@ class CustomDialog(QDialog):
         uslugeType.addItems(["Осмотр", "Консультация", "Лечение"])
         uslugeType.setStyleSheet("font-size: 20px; font-family: Arial; padding-left: 15px;")
         uslugeType.setFixedWidth(200)
+        uslugeType.textActivated.connect(self.uslugeChoose)
 
         message5 = QLabel("Описание")
         message5.setStyleSheet("font-weight: bold; min-width: 50px;")
@@ -301,6 +303,7 @@ class CustomDialog(QDialog):
         textNotes = QLineEdit()
         textNotes.setStyleSheet("font-size: 20px; font-family: Arial; padding-left: 15px;")
         textNotes.setFixedWidth(200)
+        textNotes.textActivated.connect(self.textNotess)
 
         self.VerLayoutDate = QVBoxLayout()
         self.VerLayoutVrema = QVBoxLayout()
@@ -347,12 +350,36 @@ class CustomDialog(QDialog):
 
         self.setLayout(self.VertLayout)
 
+    def toStringDate(self, date):
+        self.DatePriem = date.toString("yyyy-MM-dd")
+
+    def dateChoose(self, text):
+        self.timeZapiz = text
+
+    def dateChoose(self, text):
+        if (text == "Доктор Иванов"):
+            self.idDoctor = 1
+        if(text == "Доктор Петрова"):
+            self.idDoctor = 2
+        if (text == "Доктор Сидоров"):
+            self.idDoctor = 3
+
+    def uslugeChoose(self, text):
+        self.serviceType = text
+
+    def textNotess(self, text):
+        self.Notes = text
+
     def ClickExit(self):
         self.close()
 
 
     def ClickSave(self):
+        saveToDataBase(self.DatePriem, self.timeZapiz, self.idDoctor, self.serviceType, self.Notes)
+
+    def saveToDataBase(self, date, time, dotor_id, service_type, notes):
         pass
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
